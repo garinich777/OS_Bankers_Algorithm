@@ -5,7 +5,19 @@ namespace Banker_s_Algorithm
 {
     class Program
     {
-        static int IntputData(string message = "")
+
+
+        static int[,] FindNeed(int[,] max, int[,] alocation , int row, int cloumn)
+        {
+            int[,] need_resours = new int[row, cloumn];
+            for (int i = 0; i < row; i++)
+                for (int j = 0; j < cloumn; j++)
+                    need_resours[i, j] = max[i, j] - alocation[i, j];
+
+            return need_resours;  
+        }
+
+        static int IntIntput(string message = "")
         {
             Console.Write(message);
             int el = 0;
@@ -14,27 +26,53 @@ namespace Banker_s_Algorithm
             return el;
         }
 
+        static int[,] InputData(int resource_count, int process_count)
+        {
+            int[,] array = new int[resource_count, process_count];
+            for (int j = 0; j < process_count; j++)
+                for (int i = 0; i < resource_count; i++)                                   
+                    array[i, j] = IntIntput($"-процесс A{j + 1}, ресурс R{i + 1}:");
+            return array;
+        }
+
+        static void PrintArray(int[,] array, int column, int row)
+        {
+            for (int j = 0; j < row; j++)
+            {
+                for (int i = 0; i < column; i++)
+                    Console.Write($"{array[i, j]} ");
+                Console.WriteLine();
+            }
+        }
+
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
-            int resource_count = IntputData("Введите кол-во ресурсов:");
-            int[] resourse = new int[resource_count];
-            for (int i = 0; i < resource_count; i++)
-                resourse[i] = IntputData($"ресурс {i + 1}:");
+            while (true)
+            {
+                Console.WriteLine("Hello World!");
+                int resource_count = IntIntput("Введите кол-во ресурсов:");
+                int[] resourse = new int[resource_count];
+                for (int i = 0; i < resource_count; i++)
+                    resourse[i] = IntIntput($"ресурс {i + 1}:");
 
-            int process_count = IntputData("Введите кол-во процессов:");
-            int[,] allocated_resors_process = new int[resource_count, process_count];
-            int[,] max_resors_process = new int[resource_count, process_count];
+                int process_count = IntIntput("Введите кол-во процессов:");
 
-            Console.WriteLine($"{Environment.NewLine}Предоставлено ресурсов:");
-            for (int i = 0; i < process_count; i++)
-                for (int j = 0; j < resource_count; j++)                
-                    allocated_resors_process[j, i] = IntputData($"-процесс A{i + 1}, ресурс R{j + 1}:");
+                Console.WriteLine($"{Environment.NewLine}Предоставлено ресурсов:");
+                int[,] allocated_resors = InputData(resource_count, process_count);
+                Console.WriteLine($"{Environment.NewLine}Максимальная потребность:");
+                int[,] max_resors = InputData(resource_count, process_count);
 
-            Console.WriteLine($"{Environment.NewLine}Максимальная потребность:");
-            for (int i = 0; i < process_count; i++)
-                for (int j = 0; j < resource_count; j++)                
-                    max_resors_process[j, i] = IntputData($"-процесс A{i + 1}, ресурс R{j + 1}:");
+                Console.WriteLine($"{Environment.NewLine}Предоставленные ресурсы:");
+                PrintArray(allocated_resors, resource_count, process_count);
+                Console.WriteLine($"{Environment.NewLine}Максимальные ресурсы:");
+                PrintArray(max_resors, resource_count, process_count);
+
+                Console.WriteLine($"{Environment.NewLine}Требуемые ресурсы:");
+                int[,] need_resors = FindNeed(max_resors, allocated_resors, resource_count, process_count);
+                PrintArray(need_resors, resource_count, process_count);
+            }
         }
+
+
     }
 }
