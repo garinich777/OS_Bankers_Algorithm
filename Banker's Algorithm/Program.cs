@@ -5,8 +5,6 @@ namespace Banker_s_Algorithm
 {
     class Program
     {
-
-
         static int[,] FindNeed(int[,] max, int[,] alocation , int row, int cloumn)
         {
             int[,] need_resours = new int[row, cloumn];
@@ -33,6 +31,24 @@ namespace Banker_s_Algorithm
                 for (int i = 0; i < resource_count; i++)                                   
                     array[i, j] = IntIntput($"-процесс A{j + 1}, ресурс R{i + 1}:");
             return array;
+        }
+
+        static int[] GetFreeResours(int[,] allocated_resors,int[] resourse, int resource_count, int process_count)
+        {
+            int[] free_resours = new int[resource_count];
+            for (int i = 0; i < resource_count; i++)                
+            {
+                free_resours[i] = 0;
+                for (int j = 0; j < process_count; j++)
+                    free_resours[i] += resourse[i] - allocated_resors[i, j];
+            }
+            return free_resours;
+        }
+
+        static int GetNormalProcess()
+        {
+            int process_index;
+
         }
 
         static void PrintArray(int[,] array, int column, int row)
@@ -70,9 +86,10 @@ namespace Banker_s_Algorithm
                 Console.WriteLine($"{Environment.NewLine}Требуемые ресурсы:");
                 int[,] need_resors = FindNeed(max_resors, allocated_resors, resource_count, process_count);
                 PrintArray(need_resors, resource_count, process_count);
+
+                int[] free_resourse = GetFreeResours(allocated_resors, resourse, resource_count, process_count);
+
             }
         }
-
-
     }
 }
